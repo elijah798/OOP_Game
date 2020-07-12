@@ -4,7 +4,7 @@
 function Game() {
   this.missed = 0;
   this.phrases = [];
-  this.activePhrase;
+  this.activePhrase = "";
 
   this.startGame = function () {
     document.getElementById("overlay").style.display = "none";
@@ -22,13 +22,13 @@ function Game() {
   this.createPhrase = function () {
     let newPhrase1 = new Phrase("ttt");
     this.phrases.push(newPhrase1);
-    let newPhrase2 = new Phrase("ttt");
+    let newPhrase2 = new Phrase("A Diamond in the Rough");
     this.phrases.push(newPhrase2);
-    let newPhrase3 = new Phrase("ttt");
+    let newPhrase3 = new Phrase("A different Kettle of Fish");
     this.phrases.push(newPhrase3);
-    let newPhrase4 = new Phrase("ttt");
+    let newPhrase4 = new Phrase("Fair and Square");
     this.phrases.push(newPhrase4);
-    let newPhrase5 = new Phrase("ttt");
+    let newPhrase5 = new Phrase("Fancy Pants");
     this.phrases.push(newPhrase5);
   };
   //function that handles interaction with keypad.
@@ -39,6 +39,7 @@ function Game() {
       if (e.target.className == "key") {
         //removes life if incorrect and checks if game is over.
         if (this.activePhrase.checkLetter(e.target.textContent) == false) {
+          this.activePhrase.showMatchedLetter(e.target.textContent, e.target);
           this.removeLife();
           this.checkForWin();
         }
@@ -65,21 +66,26 @@ function Game() {
   };
   //function that checks if player won.
   this.checkForWin = function () {
+    //checking for win
     //declared variable to add how many of the phrases characters were correct
     let sum = 0;
+    let spaces = 0;
     const liElements = document.getElementById("phraseUL").children;
     Array.from(liElements).forEach((element) => {
       if (element.classList.contains("show") == true) {
         sum++;
       }
+      if (element.classList.contains("space") == true) {
+        spaces++;
+      }
     });
     //checks if length of phrase corresponds to the amount added in the sum variable.
-    if (sum == liElements.length && this.missed < 5) {
-      //liElements.parent.removeChild(liElements);
+    if (sum == liElements.length - spaces && this.missed < 5) {
       sum = 0;
       this.gameOver("win");
     } else if (this.missed == 5) {
       this.gameOver("lose");
+      sum = 0;
     }
   };
   //gameover function. finishes the game and displays a winning or losing screen depending on outcome of game.
@@ -117,9 +123,11 @@ function Game() {
       document.getElementById("overlay").className = "win";
       document.getElementById("game-over-message").textContent = "You win";
       this.missed = 0;
+      this.activePhrase = "";
       //if lost overlay display losing message. changes class of overlay to lose
     } else if (winloss == "lose") {
       this.missed = 0;
+      this.activePhrase = "";
       document.getElementById("overlay").className = "lose";
       document.getElementById("game-over-message").textContent = "You Lost";
     }
