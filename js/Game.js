@@ -20,7 +20,7 @@ function Game() {
     return randomphrase;
   };
   this.createPhrase = function () {
-    let newPhrase1 = new Phrase("ttt");
+    let newPhrase1 = new Phrase("Famous Last Words");
     this.phrases.push(newPhrase1);
     let newPhrase2 = new Phrase("A Diamond in the Rough");
     this.phrases.push(newPhrase2);
