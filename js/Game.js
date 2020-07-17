@@ -39,25 +39,22 @@ function Game() {
             if (e.target.className == "key") {
                 //removes life if incorrect and checks if game is over.
                 if (this.activePhrase.checkLetter(e.target.textContent) == false) {
-                    this.activePhrase.showMatchedLetter(e.target.textContent, e.target);
                     e.target.className = "wrong";
                     e.target.disabled = true;
                     this.removeLife();
 
                 }
                 //checks if letter selected is correct.
-                if (
-                    this.activePhrase.checkLetter(e.target.textContent) == true &&
-                    this.missed < 5
-                ) {
+                if (this.activePhrase.checkLetter(e.target.textContent) == true) {
                     this.activePhrase.showMatchedLetter(e.target.textContent, e.target);
                     e.target.classList.add("chosen");
+                    if (this.checkForWin() == false) {
+                        this.gameOver('lose');
+                    } else if (this.checkForWin() == true) {
+                        this.gameOver('win');
+                    }
                 }
-                if (this.checkForWin() == false) {
-                    this.gameOver('lose');
-                } else if (this.checkForWin() == true) {
-                    this.gameOver('win');
-                }
+
 
             }
         });
@@ -75,8 +72,6 @@ function Game() {
         }
         if (this.checkForWin() == false) {
             this.gameOver('lose');
-        } else if (this.checkForWin() == true) {
-            this.gameOver('win');
         }
     };
     //function that checks if player won.
